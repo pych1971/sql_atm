@@ -112,3 +112,25 @@ class SQL_atm:
             except:
                 print('Попытка выполнить некорректное действие')
                 return False
+
+    """Выбор операции"""
+
+    @staticmethod
+    def input_operation(number_card):
+        while True:
+            operation = input('Введите пожалуйста операцию которую хотите совершить: \n'
+                              '1. Узнать баланс\n'
+                              '2. Снять денежные средства\n'
+                              '3. Внести денежные средства\n'
+                              '4. Завершить работу\n')
+            if operation == '1':
+                SQL_atm.info_balance(number_card)
+            elif operation == '2':
+                SQL_atm.withdraw_money(number_card)
+            elif operation == '3':
+                SQL_atm.depositing_money(number_card)
+            elif operation == '4':
+                print('Спасибо за Ваш визит, всего доброго!')
+                return False
+            else:
+                print('Данная оепрация недоступна, проносим свои извинения! Попробуйте другую операцию!')
