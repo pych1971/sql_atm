@@ -12,6 +12,7 @@ class ATM():
             if SQL_atm.input_card(number_card):
                 if SQL_atm.input_code(number_card):
                     SQL_atm.info_balance(number_card)
+                    SQL_atm.withdraw_money(number_card)
                     break
                 else:
                     break
