@@ -1,4 +1,8 @@
+import csv
+import datetime
 import sqlite3
+
+now_data = datetime.datetime.utcnow().strftime('%H:%M-%d.%m.%Y')
 
 
 class SQL_atm:
@@ -93,6 +97,7 @@ class SQL_atm:
                         f"""UPDATE Users_data SET Balance = Balance - {amount} WHERE Number_card={number_card}""")
                     db.commit()
                     SQL_atm.info_balance(number_card)
+                    SQL_atm.report_operation_1(now_data, number_card, '1', amount, '')
                     return True
             except:
                 print('Попытка выполнить некорректное действие')
@@ -109,6 +114,7 @@ class SQL_atm:
                 cur.execute(f"""UPDATE Users_data SET Balance = Balance + {amount} WHERE Number_card={number_card}""")
                 db.commit()
                 SQL_atm.info_balance(number_card)
+                SQL_atm.report_operation_1(now_data, number_card, '2', amount, '')
             except:
                 print('Попытка выполнить некорректное действие')
                 return False
@@ -178,3 +184,28 @@ class SQL_atm:
                 SQL_atm.transfer_money(number_card)
             else:
                 print('Данная операция недоступна, проносим свои извинения! Попробуйте другую операцию!')
+
+    """Отчёт об операциях"""
+
+    @staticmethod
+    def report_operation_1(now_date, number_card, type_operation, amount, payee):
+        user_data = [
+            (now_date, number_card, type_operation, amount, payee)
+        ]
+        with open('report.csv', 'a', newline='') as file:
+            writer = csv.writer(file, delimiter=';')
+            writer.writerows(
+                user_data
+            )
+        print('Данные внесены в отчёт')
+
+
+"""
+Type_operation
+
+1 - Снятие денежных средств
+2 - Пополнение счёта
+3 - Перевод денежных средств
+"""
+
+# SQL_atm.report_operation_1()
