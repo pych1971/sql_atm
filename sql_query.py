@@ -2,7 +2,7 @@ import csv
 import datetime
 import sqlite3
 
-now_data = datetime.datetime.utcnow().strftime('%H:%M-%d.%m.%Y')
+now_data = datetime.datetime.now(datetime.UTC).strftime('%H:%M-%d.%m.%Y')
 
 
 class SQL_atm:
@@ -155,6 +155,8 @@ class SQL_atm:
                         f"""UPDATE Users_data SET Balance = Balance + {amount} WHERE Number_card={distant_card}""")
                     db.commit()
                     SQL_atm.info_balance(number_card)
+                    SQL_atm.report_operation_1(now_data, number_card, '3', amount, distant_card)
+                    SQL_atm.report_operation_2(now_data, distant_card, '3', amount, number_card)
                     return True
             except:
                 print('Попытка выполнить некорректное действие')
@@ -199,6 +201,20 @@ class SQL_atm:
             )
         print('Данные внесены в отчёт')
 
+    """Отчёт об операциях 2"""
+
+    @staticmethod
+    def report_operation_2(now_date, payee, type_operation, amount, number_card):
+        user_data = [
+            (now_date, payee, type_operation, amount, number_card)
+        ]
+        with open('report_2.csv', 'a', newline='') as file:
+            writer = csv.writer(file, delimiter=';')
+            writer.writerows(
+                user_data
+            )
+        print('Данные внесены в отчёт 2')
+
 
 """
 Type_operation
@@ -209,3 +225,4 @@ Type_operation
 """
 
 # SQL_atm.report_operation_1()
+# SQL_atm.report_operation_2()
