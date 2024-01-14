@@ -129,6 +129,9 @@ class SQL_atm:
                 if int(amount) > balance_card:
                     print('На Вашей карте недостаточно денежных средств')
                     return False
+                elif int(amount) <= 0:
+                    print('Сумма перевода должна быть положительной!')
+                    return False
                 else:
                     try:
                         cur.execute(f"""SELECT Number_card FROM USERS_data WHERE Number_card = {distant_card}""")
